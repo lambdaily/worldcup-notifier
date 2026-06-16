@@ -197,6 +197,9 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname, "public")));
 
+// Debug endpoint
+app.get("/api/health", (_req, res) => res.json({ status: "ok", mode: MODE, port: PORT }));
+
 app.get("/api/vapid", (_req, res) => res.json({ publicKey: vapid.publicKey }));
 app.get("/api/matches", (_req, res) => res.json({ mode: MODE, matches }));
 

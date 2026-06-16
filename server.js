@@ -112,11 +112,11 @@ let demoFixtures = [
     home: { name: "Irán", code: "ir", score: 2 }, away: { name: "Nueva Zelanda", code: "nz", score: 2 } },
   { id: "wc-iq-no", group: "I", status: "live", min: 0, when: "Hoy 19:00",
     home: { name: "Irak", code: "iq", score: 0 }, away: { name: "Noruega", code: "no", score: 0 } },
-  { id: "wc-ar-dz", group: "J", status: "scheduled", when: "Hoy 22:00",
+  { id: "wc-ar-dz", group: "J", status: "live", min: 0, when: "Hoy 22:00",
     home: { name: "Argentina", code: "ar", score: 0 }, away: { name: "Argelia", code: "dz", score: 0 } },
-  { id: "wc-at-jo", group: "J", status: "scheduled", when: "Mañana 01:00",
+  { id: "wc-at-jo", group: "J", status: "live", min: 0, when: "Mañana 01:00",
     home: { name: "Austria", code: "at", score: 0 }, away: { name: "Jordania", code: "jo", score: 0 } },
-  { id: "wc-pt-cd", group: "K", status: "scheduled", when: "Mañana 14:00",
+  { id: "wc-pt-cd", group: "K", status: "live", min: 0, when: "Mañana 14:00",
     home: { name: "Portugal", code: "pt", score: 0 }, away: { name: "RD Congo", code: "cd", score: 0 } },
 ];
 
@@ -129,7 +129,12 @@ function fetchDemo() {
         const side = Math.random() < 0.5 ? "home" : "away";
         m[side].score += 1;
       }
-      if (m.min >= 90) m.status = "finished";
+      // Reiniciar partido cuando termina para seguir generando goles
+      if (m.min >= 90) {
+        m.min = 0;
+        m.home.score = 0;
+        m.away.score = 0;
+      }
     }
     const label =
       m.status === "live" ? `${m.min}'` :

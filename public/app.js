@@ -5,6 +5,9 @@ const prevScores = new Map();
 
 const $ = (id) => document.getElementById(id);
 
+// ---------- URL del servidor ----------
+const SERVER_URL = window.SERVER_URL || ''; // vacío = mismo origen (PWA), o URL de Railway (app nativa)
+
 // ---------- Capacitor (app nativa) ----------
 import { initCapacitor, showNativeNotification, isNativeApp } from './capacitor.js';
 initCapacitor();
@@ -112,7 +115,7 @@ $("goalOverlay").addEventListener("click", () => {
 // ---------- Render de partidos ----------
 async function refreshMatches() {
   try {
-    const res = await fetch("/api/matches");
+    const res = await fetch(`${SERVER_URL}/api/matches`);
     const { matches } = await res.json();
     const box = $("matches");
     if (!matches.length) {
@@ -174,12 +177,12 @@ async function enableNotifications() {
     return;
   }
   const reg = await navigator.serviceWorker.ready;
-  const { publicKey } = await (await fetch("/api/vapid")).json();
+  const { publicKey } = await (await fetch(`${SERVER_URL}/api/vapid`)).json();
   const sub = await reg.pushManager.subscribe({
     userVisibleOnly: true,
     applicationServerKey: urlBase64ToUint8Array(publicKey),
   });
-  await fetch("/api/subscribe", {
+  await fetch(`${SERVER_URL}/api/subscribe`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(sub),
@@ -208,7 +211,7 @@ $("soundToggle").addEventListener("click", () => {
 });
 $("testBtn").addEventListener("click", async () => {
   initAudio();
-  try { await fetch("/api/test-goal", { method: "POST" }); } catch (e) {}
+  try { await fetch(`${SERVER_URL}/api/test-goal`, { method: "POST" }); } catch (e) {}
   // también mostramos localmente al instante
   celebrate({
     team: "Argentina",

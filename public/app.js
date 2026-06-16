@@ -221,11 +221,24 @@ async function init() {
       if (perm === "granted") $("notifBanner").classList.add("hidden");
     } catch (e) { console.error("SW error", e); }
   }
-  // Si abrimos desde una notificación de gol, celebramos
+
+  // Verificar si hay un gol en la URL (desde notificación)
   const params = new URLSearchParams(location.search);
   if (params.get("goal")) {
     try { celebrate(JSON.parse(decodeURIComponent(params.get("goal")))); } catch (e) {}
+  } else {
+    // Verificar si hay un gol guardado en cache (app cerrada)
+    try {
+      const cache = await caches.open("goal-notifier");
+      const response = await cache.match("/last-goal");
+      if (response) {
+        const goal = await response.json();
+        celebrate(goal);
+        await cache.delete("/last-goal");
+      }
+    } catch (e) {}
   }
+
   refreshMatches();
   setInterval(refreshMatches, 10000);
 }

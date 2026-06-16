@@ -2,6 +2,17 @@
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (e) => e.waitUntil(self.clients.claim()));
 
+// Guardar último gol en Cache API para recuperarlo al abrir la app
+async function saveLastGoal(data) {
+  try {
+    const cache = await caches.open("goal-notifier");
+    const response = new Response(JSON.stringify(data), {
+      headers: { "Content-Type": "application/json" },
+    });
+    await cache.put("/last-goal", response);
+  } catch (e) {}
+}
+
 self.addEventListener("push", (event) => {
   let data = {};
   try { data = event.data.json(); } catch (e) {}
@@ -18,12 +29,12 @@ self.addEventListener("push", (event) => {
     vibrate: [200, 80, 200, 80, 400],
     tag: "goal",
     renotify: true,
-    data: { url: `/?goal=${goalParam}` },
+    data: { url: `/?goal=${goalParam}`, goal: data },
   };
 
   event.waitUntil(
     (async () => {
-      // Si hay una ventana abierta, dispara la animación directamente
+      await saveLastGoal(data);
       const clients = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
       for (const c of clients) c.postMessage({ type: "goal", ...data });
       await self.registration.showNotification(title, options);

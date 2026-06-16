@@ -208,6 +208,10 @@ app.post("/api/subscribe", (req, res) => {
   res.json({ ok: true });
 });
 
+app.get("/api/subscriptions", (_req, res) => {
+  res.json({ count: subscriptions.length, subscriptions });
+});
+
 // Canal en tiempo real para el overlay de escritorio (Electron)
 app.get("/api/events", (req, res) => {
   res.set({

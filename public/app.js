@@ -7,6 +7,7 @@ const $ = (id) => document.getElementById(id);
 
 // ---------- URL del servidor ----------
 const SERVER_URL = window.SERVER_URL || ''; // vacío = mismo origen (PWA), o URL de Railway (app nativa)
+console.log('SERVER_URL:', SERVER_URL);
 
 // ---------- Capacitor (app nativa) ----------
 import { initCapacitor, showNativeNotification, isNativeApp } from './capacitor.js';
@@ -104,6 +105,10 @@ function celebrate(goal) {
   playGoalSound();
   if (navigator.vibrate) navigator.vibrate([200, 80, 200, 80, 400]);
 
+  if (isNativeApp() && document.hidden) {
+    showNativeNotification(goal);
+  }
+
   clearTimeout(overlayTimer);
   overlayTimer = setTimeout(hideOverlay, 7000);
 }
@@ -115,8 +120,11 @@ $("goalOverlay").addEventListener("click", () => {
 // ---------- Render de partidos ----------
 async function refreshMatches() {
   try {
+    console.log('Fetching matches from:', `${SERVER_URL}/api/matches`);
     const res = await fetch(`${SERVER_URL}/api/matches`);
+    console.log('Response status:', res.status);
     const { matches } = await res.json();
+    console.log('Matches:', matches);
     const box = $("matches");
     if (!matches.length) {
       box.innerHTML = '<p class="empty">No hay partidos en vivo ahora mismo.</p>';
@@ -153,7 +161,7 @@ async function refreshMatches() {
       prevScores.set(m.id, key);
     }
   } catch (e) {
-    /* servidor no disponible */
+    console.error('Error fetching matches:', e);
   }
 }
 
@@ -212,13 +220,19 @@ $("soundToggle").addEventListener("click", () => {
 $("testBtn").addEventListener("click", async () => {
   initAudio();
   try { await fetch(`${SERVER_URL}/api/test-goal`, { method: "POST" }); } catch (e) {}
-  // también mostramos localmente al instante
-  celebrate({
+  
+  const testGoal = {
     team: "Argentina",
     flag: "https://flagcdn.com/w320/ar.png",
     homeName: "Argentina", awayName: "Brasil",
     score: "1 - 0", minute: "23'",
-  });
+  };
+  
+  celebrate(testGoal);
+  
+  if (isNativeApp()) {
+    showNativeNotification(testGoal);
+  }
 });
 
 // ---------- Mensajes desde el Service Worker (push con app abierta) ----------

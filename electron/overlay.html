@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="overlay.css" />
+</head>
+<body>
+  <!-- estado de conexión (esquina, discreto) -->
+  <div id="conn" class="conn">conectando…</div>
+
+  <!-- confeti -->
+  <div id="confetti" class="confetti"></div>
+
+  <!-- el personaje que cruza la pantalla -->
+  <div id="runner" class="runner hidden">
+    <div class="bubble">
+      <div class="bubble__goal">¡GOOOL!</div>
+      <div class="bubble__team" id="team">—</div>
+      <div class="bubble__score" id="score">0 - 0</div>
+    </div>
+    <img id="flag" class="cape" alt="" />
+    <div class="ball">⚽</div>
+    <div class="legs">🏃💨</div>
+  </div>
+
+  <script src="overlay.js"></script>
+</body>
+</html>

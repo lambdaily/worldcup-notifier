@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0e1a" />
+  <title>⚽ Goal Notifier</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>⚽ Goal Notifier</h1>
+    <div class="controls">
+      <span id="status" class="status status--off">—</span>
+      <button id="soundToggle" class="btn btn--ghost" title="Sonido">🔊</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="notifBanner" class="banner">
+      <span>Activa los avisos de gol (funcionan con la app cerrada).</span>
+      <button id="enableNotif" class="btn btn--primary">Activar avisos 🔔</button>
+    </div>
+
+    <p id="iosHint" class="ios-hint hidden">
+      📱 En iPhone: pulsa <b>Compartir</b> → <b>Añadir a pantalla de inicio</b>, abre desde el icono
+      y vuelve a activar los avisos.
+    </p>
+
+    <div id="matches" class="matches">
+      <p class="empty">Cargando partidos…</p>
+    </div>
+
+    <div class="footer-actions">
+      <button id="testBtn" class="btn btn--ghost">Probar gol de prueba ⚽</button>
+    </div>
+  </main>
+
+  <!-- Overlay de celebración -->
+  <div id="goalOverlay" class="goal-overlay hidden">
+    <div class="goal-confetti" id="confetti"></div>
+    <div class="goal-card">
+      <div class="goal-word">¡GOOOOL!</div>
+      <img id="goalFlag" class="goal-flag" alt="bandera" />
+      <div id="goalTeam" class="goal-team">—</div>
+      <div class="goal-score">
+        <span id="goalHome" class="goal-score__name">Local</span>
+        <span id="goalScore" class="goal-score__num">0 - 0</span>
+        <span id="goalAway" class="goal-score__name">Visitante</span>
+      </div>
+      <div id="goalMinute" class="goal-minute"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

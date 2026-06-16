@@ -1,0 +1,18 @@
+{
+  "name": "worldcup-notifier",
+  "version": "1.0.0",
+  "description": "PWA + watcher que avisa con push, animación y sonido cuando hay un gol",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "overlay": "electron electron/main.cjs"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "web-push": "^3.6.7"
+  },
+  "devDependencies": {
+    "electron": "^42.4.1"
+  }
+}

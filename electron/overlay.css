@@ -1,0 +1,115 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent; /* la ventana es transparente */
+  font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  user-select: none;
+}
+
+.hidden { display: none !important; }
+
+/* indicador de conexión, chiquito */
+.conn {
+  position: fixed;
+  bottom: 10px;
+  right: 14px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.55);
+  background: rgba(0, 0, 0, 0.35);
+  padding: 3px 8px;
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.conn.show { opacity: 1; }
+
+/* ---------- El corredor que cruza la pantalla ---------- */
+.runner {
+  position: fixed;
+  bottom: 12%;
+  left: -360px;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.45));
+  z-index: 5;
+}
+.runner.go {
+  animation: cross var(--dur, 4.5s) cubic-bezier(0.4, 0.05, 0.6, 0.95) forwards;
+}
+@keyframes cross {
+  0%   { left: -360px; transform: translateY(0) rotate(0deg); }
+  8%   { transform: translateY(-30px); }
+  16%  { transform: translateY(0); }
+  24%  { transform: translateY(-22px); }
+  32%  { transform: translateY(0); }
+  40%  { transform: translateY(-16px); }
+  48%  { transform: translateY(0); }
+  100% { left: 110%; transform: translateY(0) rotate(0deg); }
+}
+
+.ball {
+  font-size: 84px;
+  line-height: 1;
+  animation: roll 0.5s linear infinite;
+}
+@keyframes roll { to { transform: rotate(360deg); } }
+
+.legs {
+  font-size: 70px;
+  line-height: 1;
+  animation: bobble 0.18s ease-in-out infinite alternate;
+}
+@keyframes bobble { to { transform: translateY(-6px) scaleX(1.05); } }
+
+/* bandera como "capa" flameando */
+.cape {
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  transform-origin: left center;
+  animation: flap 0.4s ease-in-out infinite alternate;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+}
+@keyframes flap {
+  from { transform: skewY(-6deg) scaleX(0.96); }
+  to   { transform: skewY(6deg) scaleX(1.04); }
+}
+
+/* globo de diálogo con el marcador */
+.bubble {
+  background: #fff;
+  color: #0a0e1a;
+  border-radius: 16px;
+  padding: 10px 16px;
+  text-align: center;
+  position: relative;
+  margin-bottom: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  animation: pulse 0.5s ease-in-out infinite alternate;
+}
+.bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 28px;
+  border: 10px solid transparent;
+  border-top-color: #fff;
+  border-bottom: 0;
+}
+@keyframes pulse { to { transform: scale(1.05); } }
+.bubble__goal { font-size: 26px; font-weight: 900; color: #00b25b; letter-spacing: 1px; }
+.bubble__team { font-size: 17px; font-weight: 800; margin-top: 2px; }
+.bubble__score {
+  font-size: 22px; font-weight: 900; margin-top: 4px;
+  background: #0a0e1a; color: #ffd23f; border-radius: 8px; padding: 2px 10px; display: inline-block;
+}
+
+/* ---------- Confeti ---------- */
+.confetti { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 4; }
+.piece { position: absolute; width: 12px; height: 16px; top: -24px; animation: fall linear forwards; }
+@keyframes fall { to { transform: translateY(110vh) rotate(900deg); opacity: 0.85; } }

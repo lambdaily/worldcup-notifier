@@ -20,7 +20,9 @@ fs.mkdirSync(DATA_DIR, { recursive: true });
 
 // ---------- VAPID (claves para Web Push) ----------
 let vapid;
-if (fs.existsSync(VAPID_FILE)) {
+if (process.env.VAPID_PUBLIC && process.env.VAPID_PRIVATE) {
+  vapid = { publicKey: process.env.VAPID_PUBLIC, privateKey: process.env.VAPID_PRIVATE };
+} else if (fs.existsSync(VAPID_FILE)) {
   vapid = JSON.parse(fs.readFileSync(VAPID_FILE, "utf8"));
 } else {
   vapid = webpush.generateVAPIDKeys();

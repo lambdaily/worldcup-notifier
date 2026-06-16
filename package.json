@@ -6,13 +6,23 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "overlay": "electron electron/main.cjs"
+    "overlay": "electron electron/main.cjs",
+    "android:sync": "npx cap sync android",
+    "android:open": "npx cap open android",
+    "android:build": "npm run android:sync && npx cap open android"
   },
   "dependencies": {
+    "@capacitor/android": "^7.2.0",
+    "@capacitor/app": "^7.0.1",
+    "@capacitor/cli": "^7.2.0",
+    "@capacitor/core": "^7.2.0",
+    "@capacitor/haptics": "^7.0.1",
+    "@capacitor/local-notifications": "^7.0.1",
     "express": "^4.19.2",
     "web-push": "^3.6.7"
   },
   "devDependencies": {
     "electron": "^42.4.1"
   }
+}
 }

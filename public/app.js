@@ -5,6 +5,18 @@ const prevScores = new Map();
 
 const $ = (id) => document.getElementById(id);
 
+// ---------- Capacitor (app nativa) ----------
+import { initCapacitor, showNativeNotification, isNativeApp } from './capacitor.js';
+initCapacitor();
+
+window.addEventListener('capacitor-goal', (e) => {
+  celebrate(e.detail);
+});
+
+window.addEventListener('app-resumed', () => {
+  refreshMatches();
+});
+
 // ---------- Sonido de gol (sintetizado, sin archivos) ----------
 function initAudio() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();

@@ -36,7 +36,15 @@ self.addEventListener("push", (event) => {
     (async () => {
       await saveLastGoal(data);
       const clients = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
-      for (const c of clients) c.postMessage({ type: "goal", ...data });
+      
+      // Si hay ventanas abiertas, enviar mensaje directo
+      if (clients.length > 0) {
+        for (const c of clients) {
+          c.postMessage({ type: "goal", ...data });
+        }
+      }
+      
+      // Siempre mostrar notificación (para cuando la app está en segundo plano)
       await self.registration.showNotification(title, options);
     })()
   );
